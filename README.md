@@ -11,4 +11,6 @@ currently implemented:
     - double that integral, subtract the final x-value squared, divide by n², and BAM! approximately π/4.
 - ???? more to come
 
-## possible additions: euler-mascheroni constant (γ, approx. 0.57721), euler's number (e, approx. 2.71828)
+## possible additions
+- euler-mascheroni constant (γ, approx. 0.57721)
+- euler's number (e, approx. 2.71828)
