@@ -1,17 +1,35 @@
-use rug::Float;
+use rug::{rational::MiniRational, Float};
 
+mod common;
+mod euler;
+mod ln2;
 mod pi;
-use pi::{pi_arclength, pi_area};
+use euler::{interest, maclaurin};
+use ln2::classic_taylor;
+use pi::{pi_arclength, pi_area, pi_classic};
 
 fn main() {
-    let prec: u32 = 256;
-    let mut d: Float = Float::with_val(prec, 1);
-    let mut m: Float = Float::with_val(prec, 1);
-    for _ in 0..10 {
-        m /= 100_000
-    }
-    d /= 1e6;
     println!("Hello, world!");
-    println!("{}", pi_arclength(d.clone(), m.clone(), prec, true));
-    println!("{}", pi_area(1 << 30, true));
+    let prec: u32 = 256;
+    let d: Float = Float::with_val(prec, &*MiniRational::from((1, 1 << 20)).borrow());
+    let m: Float = Float::with_val(prec, &*MiniRational::from((1, 1u128 << 80)).borrow());
+
+    println!("= PI =");
+    println!("arclength diff eq: {}", pi_arclength(d.clone(), m.clone(), prec, true));
+    println!("area integral: {}", pi_area(1 << 20, true));
+    println!("arctan taylor series: {}", pi_classic(1 << 22, true));
+    println!();
+
+    println!("= NATURAL LOG OF 2 =");
+    println!("ln taylor series: {}", classic_taylor(1 << 22, true));
+    println!();
+
+    println!("= e =");
+    println!("maclaurin series: {}", maclaurin(1 << 20, prec, true));
+    println!("interest formula: {}", interest(1 << 12, 1 << 13, true));
 }
+
+/*
+ * x+10y+25z=300
+ * x=300-10y-25z
+ */
