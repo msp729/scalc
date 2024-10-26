@@ -9,9 +9,10 @@ pub fn maclaurin(l: u64, p: u32, trace: bool) -> Float {
         if trace {
             progress(((80 * i) / l) as usize);
         }
-        t /= i;
+        t /= i; // t is 1/i!
         e += &t;
-    }
+    } // this is just the sum of 1/i! for i from 0 to l
+      // classic formula, very fast convergence
     if trace {
         println!();
     }
@@ -24,15 +25,16 @@ pub fn interest(n: u64, p: u32, trace: bool) -> Float {
         if trace {
             progress(((40 * i) / n) as usize);
         }
-        e /= 2;
+        e /= 2; // e will be 2⁻ⁿ
     }
-    e = 1 + e;
+    e = 1 + e; // 1 + 2⁻ⁿ
     for i in 0..n {
         if trace && (0 == (i % 50)) {
             progress(40 + ((40 * i) / n) as usize);
         }
-        e = (&e * &e).complete(p);
-    }
+        e = (&e * &e).complete(p); // square it n times
+    } // (1 + 2⁻ⁿ) ^ 2ⁿ
+      // it's a version of the classic limit, (1 + 1/n)ⁿ as n → ∞
     if trace {
         println!();
     }

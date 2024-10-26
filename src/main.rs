@@ -11,12 +11,13 @@ use pi::{pi_arclength, pi_area, pi_classic};
 fn main() {
     println!("Hello, world!");
     let prec: u32 = 256;
+    // initial & minimum Δt, 2⁻²⁰ and 2⁻¹²⁸, respectively
     let d: Float = Float::with_val(prec, &*MiniRational::from((1, 1 << 20)).borrow());
     let m: Float = Float::with_val(prec, &*MiniRational::from((1, 1u128 << 80)).borrow());
 
     println!("= PI =");
     println!(
-        "arclength diff eq: {}",
+        "arclength diff. eq.: {}",
         pi_arclength(d.clone(), m.clone(), prec, true)
     );
     println!("area integral: {}", pi_area(1 << 20, true));
@@ -33,8 +34,3 @@ fn main() {
     println!("ln taylor series: {}", classic_taylor(1 << 22, true));
     println!("log properties: {}", log_props(400, &e, false));
 }
-
-/*
- * x+10y+25z=300
- * x=300-10y-25z
- */

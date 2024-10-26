@@ -2,6 +2,8 @@ use crate::common::progress;
 use rug::{ops::CompleteRound, Float};
 
 pub fn classic_taylor(l: i64, trace: bool) -> f64 {
+    // the taylor series for ln(1+x) = x - x^2/2 + x^3/3 + ...
+    // when x=1, we get ln(2) = 1 - 1/2 + 1/3 - 1/4 + 1/5 - 1/6 + ...
     let mut i = 1;
     let mut t = 0.0;
     while i <= l {
@@ -15,7 +17,9 @@ pub fn classic_taylor(l: i64, trace: bool) -> f64 {
     if trace {
         println!();
     }
-    t + 0.5 / i as f64
+    t + 0.5 / i as f64 // terminate by adding half of the next term
+                       // this is the euler transform for alternating series
+                       // it accelerates convergence
 }
 
 pub fn log_props(prec: u32, e: &Float, trace: bool) -> Float {
@@ -27,11 +31,12 @@ pub fn log_props(prec: u32, e: &Float, trace: bool) -> Float {
             progress(((i * 80) / prec) as usize);
         }
         if two > *e {
-            two /= e;
+            // ln(x) = 1 + ln(x/e)
+            two /= e; // we want x > 1, so we only apply this when x > e
             ret += &del;
         }
-        two = (&two * &two).complete(prec);
-        del /= 2;
+        two = (&two * &two).complete(prec); // ln(x) = ln(x²) / 2
+        del /= 2; // halve the amount we will add, & square the argument
     }
     if trace {
         println!();
