@@ -28,11 +28,13 @@ pub fn interest(n: u64, p: u32, trace: bool) -> Float {
     }
     e = 1 + e;
     for i in 0..n {
-        if trace {
+        if trace && (0 == (i % 50)) {
             progress(40 + ((40 * i) / n) as usize);
         }
         e = (&e * &e).complete(p);
     }
-    println!();
+    if trace {
+        println!();
+    }
     e
 }

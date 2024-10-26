@@ -2,13 +2,13 @@ use crate::common::progress;
 use rug::ops::CompleteRound;
 use rug::Float;
 
-pub fn pi_arclength(mut d: Float, m: Float, prec: u32, log: bool) -> Float {
+pub fn pi_arclength(mut d: Float, m: Float, prec: u32, trace: bool) -> Float {
     let mut x = Float::with_val(prec, 1u8);
     let mut y = Float::with_val(prec, 0u8);
     let mut t = Float::with_val(prec, 0u8);
     let mut h = 0u8;
     while d >= m && x > y {
-        if h == 0 && log {
+        if h == 0 && trace {
             progress(1 + (80.0 * (1.0 - (&x - &y).complete(prec).to_f64())) as usize);
         }
         h = (h + 1) % 250;
@@ -37,19 +37,19 @@ pub fn pi_arclength(mut d: Float, m: Float, prec: u32, log: bool) -> Float {
             d /= 2;
         }
     }
-    if log {
+    if trace {
         println!()
     }
     t * 4
 }
 
-pub fn pi_area_n(n: u128, log: bool) -> u128 {
+pub fn pi_area_n(n: u128, trace: bool) -> u128 {
     let mut x = 1;
     let mut y = n;
     let mut r = 0;
     let mut h = 0u8;
     while x < y {
-        if h == 0 && log {
+        if h == 0 && trace {
             progress(1 + ((80 * (n - y + x)) / n) as usize);
         }
         h = (h + 1) % 250;
@@ -60,12 +60,14 @@ pub fn pi_area_n(n: u128, log: bool) -> u128 {
         }
     }
     r += (x + n) / 2;
-    println!();
+    if trace {
+        println!();
+    }
     2 * r - x * x
 }
 
-pub fn pi_area(d: u128, log: bool) -> f64 {
-    4.0 * pi_area_n(d, log) as f64 / (d * d) as f64
+pub fn pi_area(d: u128, trace: bool) -> f64 {
+    4.0 * pi_area_n(d, trace) as f64 / (d * d) as f64
 }
 
 pub fn pi_classic(l: i64, trace: bool) -> f64 {
@@ -82,6 +84,8 @@ pub fn pi_classic(l: i64, trace: bool) -> f64 {
     i += 2 * i.signum();
     i *= -1;
     t += 2f64 / i as f64;
-    println!();
+    if trace {
+        println!();
+    }
     t
 }
